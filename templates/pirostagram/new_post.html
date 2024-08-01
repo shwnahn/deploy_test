@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="create-post-container">
+    <h3 class="create-post-title">새 게시물 만들기</h3>
+    <form method="post" enctype="multipart/form-data" class="create-post-form">
+        {% csrf_token %}
+        <div class="image-preview-container">
+            <label for="{{ image_form.images.id_for_label }}" class="image-upload-label">
+                <i class="fas fa-image"></i> 사진 추가
+            </label>
+            {{ image_form.images }}
+            <div id="image-preview"></div>
+        </div>
+        
+        <div class="text-input-container">
+            {{ form.text }}
+        </div>
+        <button type="submit" class="post-submit-button">공유하기</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra %}
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    // 이미지 입력 필드를 찾습니다. name 속성을 사용합니다.
+    const imageInput = document.querySelector('input[type="file"][name="images"]');
+    const imagePreview = document.getElementById('image-preview');
+
+    if (imageInput && imagePreview) {
+        imageInput.addEventListener('change', function(event) {
+            imagePreview.innerHTML = '';
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file.type.startsWith('image/')) {
+                    const img = document.createElement('img');
+                    img.file = file;
+                    imagePreview.appendChild(img);
+
+                    const reader = new FileReader();
+                    reader.onload = (function(aImg) {
+                        return function(e) {
+                            aImg.src = e.target.result;
+                        };
+                    })(img);
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    } else {
+        console.error('Image input or preview container not found');
+        // 요소를 찾지 못했을 때 어떤 요소가 없는지 로그를 남깁니다.
+        if (!imageInput) console.error('Image input not found');
+        if (!imagePreview) console.error('Image preview container not found');
+    }
+    });
+</script>
+{% endblock %}
