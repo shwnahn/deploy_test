@@ -87,10 +87,6 @@ DATABASES = {
         'NAME': env('DB_NAME'),
         'USER': env('DB_USER'),
         'PASSWORD': env('DB_PASSWORD'),
-        # 'HOST': '3.35.216.6',
-        # 'NAME': 'apple',
-        # 'USER': 'ubuntu',
-        # 'PASSWORD': 'ubuntu',
     }
 }
 
